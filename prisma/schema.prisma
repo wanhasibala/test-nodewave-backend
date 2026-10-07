@@ -1,0 +1,177 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  PM
+  INTERNAL_TEAM
+  CLIENT_GUEST
+}
+
+enum Department {
+  PRODUCT_MANAGEMENT
+  UI_UX
+  FRONTEND
+  BACKEND
+  CLIENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model User {
+  id          String      @id @default(uuid())
+  email       String      @unique
+  password    String
+  name        String
+  avatar      String?
+  role        UserRole    @default(INTERNAL_TEAM)
+  department  Department  @default(FRONTEND)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+
+  // Relations
+  memberships      ProjectMember[]
+  assignedTasks    Task[]           @relation("TaskAssignee")
+  createdTasks     Task[]           @relation("TaskCreator")
+  auditLogs        TaskAuditLog[]
+  comments         TaskComment[]
+
+  @@index([email])
+  @@index([role])
+  @@index([department])
+}
+
+model Project {
+  id          String      @id @default(uuid())
+  name        String
+  key         String      @unique
+  description String?
+  clientName  String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+
+  // Relations
+  members     ProjectMember[]
+  tasks       Task[]
+  auditLogs   TaskAuditLog[]
+
+  @@index([key])
+  @@index([deletedAt])
+}
+
+model ProjectMember {
+  id        String    @id @default(uuid())
+  projectId String
+  userId    String
+  role      String    @default("MEMBER") // e.g. "OWNER", "LEAD", "MEMBER", "CLIENT"
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
+}
+
+model Task {
+  id              String      @id @default(uuid())
+  projectId       String
+  title           String
+  description     String?
+  status          TaskStatus  @default(TODO)
+  department      Department  @default(FRONTEND)
+  assigneeId      String?
+  createdById     String
+  isClientVisible Boolean     @default(false)
+  version         Int         @default(1)
+  order           Int         @default(0)
+  dueDate         DateTime?
+  attachments     Json?       @default("[]")
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  deletedAt       DateTime?
+
+  // Relations
+  project         Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee        User?            @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  createdBy       User             @relation("TaskCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  dependencies    TaskDependency[] @relation("TaskPrerequisites")
+  dependents      TaskDependency[] @relation("TaskDependents")
+  auditLogs       TaskAuditLog[]
+  comments        TaskComment[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([department])
+  @@index([assigneeId])
+  @@index([isClientVisible])
+  @@index([deletedAt])
+}
+
+model TaskDependency {
+  id                 String   @id @default(uuid())
+  taskId             String
+  prerequisiteTaskId String
+  createdAt          DateTime @default(now())
+
+  // The task that has a dependency (e.g., Task C)
+  task               Task     @relation("TaskPrerequisites", fields: [taskId], references: [id], onDelete: Cascade)
+  // The prerequisite task that must be done first (e.g., Task A)
+  prerequisiteTask   Task     @relation("TaskDependents", fields: [prerequisiteTaskId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, prerequisiteTaskId])
+  @@index([taskId])
+  @@index([prerequisiteTaskId])
+}
+
+model TaskComment {
+  id         String    @id @default(uuid())
+  taskId     String
+  userId     String
+  content    String
+  isInternal Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  task       Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([userId])
+  @@index([isInternal])
+}
+
+model TaskAuditLog {
+  id            String   @id @default(uuid())
+  taskId        String
+  projectId     String
+  userId        String
+  changedColumn String
+  oldValue      String?
+  newValue      String?
+  createdAt     DateTime @default(now())
+
+  task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([projectId])
+  @@index([userId])
+  @@index([createdAt])
+}

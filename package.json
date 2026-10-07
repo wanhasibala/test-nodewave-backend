@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "build": "bun x prisma generate",
+    "test": "bun test",
+    "seed": "bun run prisma/seed.ts",
+    "db:push": "bun x prisma db push"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/bun": "latest",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.6.4",
+    "prisma": "^6.4.1"
+  },
+  "peerDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@nodewave/prisma-ezfilter": "^0.2.1",
+    "@prisma/client": "^6.4.1",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.6",
+    "hono": "^4.13.13",
+    "jsonwebtoken": "^9.0.3",
+    "zod": "^4.6.5"
+  }
+}
