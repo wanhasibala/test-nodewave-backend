@@ -12626,11 +12626,6 @@ var logger = (fn = console.log) => {
   };
 };
 
-// node_modules/hono/dist/adapter/vercel/handler.js
-var handle = (app) => (req) => {
-  return app.fetch(req);
-};
-
 // node_modules/zod/v4/classic/external.js
 var exports_external = {};
 __export(exports_external, {
@@ -35447,8 +35442,22 @@ app.notFound((c) => {
 var config2 = {
   maxDuration: 30
 };
-var serverless_default = handle(app);
+var GET = (req) => app.fetch(req);
+var POST = (req) => app.fetch(req);
+var PUT = (req) => app.fetch(req);
+var PATCH = (req) => app.fetch(req);
+var DELETE = (req) => app.fetch(req);
+var OPTIONS = (req) => app.fetch(req);
+var HEAD = (req) => app.fetch(req);
+var serverless_default = (req) => app.fetch(req);
 export {
   serverless_default as default,
-  config2 as config
+  config2 as config,
+  PUT,
+  POST,
+  PATCH,
+  OPTIONS,
+  HEAD,
+  GET,
+  DELETE
 };

@@ -1,7 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { handle } from 'hono/vercel';
 import { authRoutes } from './routes/auth.routes';
 import { projectRoutes } from './routes/project.routes';
 import { taskRoutes } from './routes/task.routes';
@@ -132,4 +131,12 @@ export const config = {
   maxDuration: 30,
 };
 
-export default handle(app);
+export const GET = (req: Request) => app.fetch(req);
+export const POST = (req: Request) => app.fetch(req);
+export const PUT = (req: Request) => app.fetch(req);
+export const PATCH = (req: Request) => app.fetch(req);
+export const DELETE = (req: Request) => app.fetch(req);
+export const OPTIONS = (req: Request) => app.fetch(req);
+export const HEAD = (req: Request) => app.fetch(req);
+
+export default (req: Request) => app.fetch(req);
