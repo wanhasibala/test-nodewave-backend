@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
+    "start:prod": "bun x prisma db push && bun run src/index.ts",
     "build": "bun x prisma generate",
     "test": "bun test",
     "seed": "bun run prisma/seed.ts",
-    "db:push": "bun x prisma db push"
+    "db:push": "bun x prisma db push",
+    "db:deploy": "bun x prisma migrate deploy"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
