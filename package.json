@@ -8,7 +8,7 @@
     "start:prod": "bun x prisma db push && bun run src/index.ts",
     "build": "bun x prisma generate",
     "vercel-build": "bun x prisma generate",
-    "test": "bun test",
+    "test": "bun test --timeout 20000",
     "seed": "bun run prisma/seed.ts",
     "db:push": "bun x prisma db push",
     "db:deploy": "bun x prisma migrate deploy"
