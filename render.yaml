@@ -1,0 +1,25 @@
+databases:
+  - name: nodewave-db
+    databaseName: nodewave_db
+    user: nodewave_user
+    plan: free
+    region: singapore
+
+services:
+  - type: web
+    name: nodewave-backend
+    runtime: docker
+    dockerfilePath: Dockerfile
+    region: singapore
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nodewave-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 10000

@@ -17,8 +17,8 @@ COPY . .
 
 # Production Environment Settings
 ENV NODE_ENV=production
-ENV PORT=4000
-EXPOSE 4000
+ENV PORT=10000
+EXPOSE 10000
 
 # Push database schema updates on boot and start server
 CMD ["sh", "-c", "bun x prisma db push && bun run src/index.ts"]
