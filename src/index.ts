@@ -14,7 +14,7 @@ app.use('*', logger());
 app.use(
   '*',
   cors({
-    origin: (origin) => origin || '*',
+    origin: (origin) => origin || '*, localhost:3000, http://localhost:3000, https://test-nodewave-backend-qvtkaqvec-wan-hasib-al-aslamys-projects.vercel.app',
     allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     exposeHeaders: ['Content-Length', 'X-Total-Count'],
@@ -22,7 +22,22 @@ app.use(
   })
 );
 
-// Health Check
+// Root & Health Check
+app.get('/', (c) => {
+  return c.json({
+    status: 'online',
+    service: 'NodeWave Project Delivery API',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      projects: '/api/projects',
+      tasks: '/api/tasks',
+      users: '/api/users',
+      auditLogs: '/api/audit-logs',
+    },
+  });
+});
+
 app.get('/health', (c) => {
   return c.json({
     status: 'ok',
