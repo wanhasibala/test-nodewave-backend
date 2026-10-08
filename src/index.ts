@@ -9,14 +9,50 @@ import { auditRoutes } from './routes/audit.routes';
 
 const app = new Hono();
 
+// Allowed Origins Whitelist for Development and Production
+const ALLOWED_ORIGIN_PATTERNS = [
+  /^http:\/\/localhost(:\d+)?$/,
+  /^http:\/\/127\.0\.0\.1(:\d+)?$/,
+  /\.vercel\.app$/,
+];
+
+const EXPLICIT_ALLOWED_ORIGINS = new Set([
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://test-nodewave-backend-qvtkaqvec-wan-hasib-al-aslamys-projects.vercel.app',
+]);
+
+// Dynamically add origins from environment variables if defined
+if (process.env.FRONTEND_URL) {
+  process.env.FRONTEND_URL.split(',').forEach((url) => EXPLICIT_ALLOWED_ORIGINS.add(url.trim()));
+}
+if (process.env.ALLOWED_ORIGINS) {
+  process.env.ALLOWED_ORIGINS.split(',').forEach((url) => EXPLICIT_ALLOWED_ORIGINS.add(url.trim()));
+}
+
 // Global Middlewares
 app.use('*', logger());
 app.use(
   '*',
   cors({
     origin: (origin) => {
-      // Allow any requesting origin (Vercel previews, production domain, localhost)
-      return origin || '*';
+      // If no origin (e.g. server-to-server, curl, Postman), allow access
+      if (!origin) return '*';
+
+      // Check explicit exact match
+      if (EXPLICIT_ALLOWED_ORIGINS.has(origin)) {
+        return origin;
+      }
+
+      // Check regex pattern match (localhost ports, all *.vercel.app deployment domains)
+      if (ALLOWED_ORIGIN_PATTERNS.some((pattern) => pattern.test(origin))) {
+        return origin;
+      }
+
+      // Fallback: return requested origin to prevent blocking preview deployments
+      return origin;
     },
     allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowHeaders: [
