@@ -73,9 +73,9 @@ app.notFound((c) => {
 
 const PORT = parseInt(process.env.PORT || '4000', 10);
 
-console.log(`🚀 NodeWave Delivery Engine API running on port ${PORT}`);
+if (process.env.NODE_ENV !== 'test') {
+  console.log(`🚀 NodeWave Delivery Engine API running on port ${PORT}`);
+}
 
-export default {
-  port: PORT,
-  fetch: app.fetch,
-};
+export { app };
+export default app;

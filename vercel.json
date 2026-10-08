@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "buildCommand": "bun x prisma generate",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
+    }
+  ]
+}

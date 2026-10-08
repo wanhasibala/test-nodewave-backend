@@ -7,6 +7,7 @@
     "start": "bun src/index.ts",
     "start:prod": "bun x prisma db push && bun run src/index.ts",
     "build": "bun x prisma generate",
+    "vercel-build": "bun x prisma generate",
     "test": "bun test",
     "seed": "bun run prisma/seed.ts",
     "db:push": "bun x prisma db push",
