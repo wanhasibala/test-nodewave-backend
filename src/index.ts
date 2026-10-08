@@ -14,13 +14,30 @@ app.use('*', logger());
 app.use(
   '*',
   cors({
-    origin: (origin) => origin || '*, localhost:3000, http://localhost:3000, https://test-nodewave-backend-qvtkaqvec-wan-hasib-al-aslamys-projects.vercel.app',
+    origin: (origin) => {
+      // Allow any requesting origin (Vercel previews, production domain, localhost)
+      return origin || '*';
+    },
     allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Requested-With',
+      'Accept',
+      'Origin',
+      'Access-Control-Request-Method',
+      'Access-Control-Request-Headers',
+    ],
     exposeHeaders: ['Content-Length', 'X-Total-Count'],
     credentials: true,
+    maxAge: 86400,
   })
 );
+
+// Explicit OPTIONS preflight handler
+app.options('*', (c) => {
+  return c.body(null, 204);
+});
 
 // Root & Health Check
 app.get('/', (c) => {
