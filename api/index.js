@@ -35349,7 +35349,7 @@ auditRoutes.get("/", async (c) => {
   }
 });
 
-// api/index.ts
+// src/serverless.ts
 var app = new Hono3;
 var ALLOWED_ORIGIN_PATTERNS = [
   /^http:\/\/localhost(:\d+)?$/,
@@ -35447,8 +35447,8 @@ app.notFound((c) => {
 var config2 = {
   maxDuration: 30
 };
-var api_default = handle(app);
+var serverless_default = handle(app);
 export {
-  api_default as default,
+  serverless_default as default,
   config2 as config
 };

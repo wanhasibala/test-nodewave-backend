@@ -2,11 +2,11 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { handle } from 'hono/vercel';
-import { authRoutes } from '../src/routes/auth.routes';
-import { projectRoutes } from '../src/routes/project.routes';
-import { taskRoutes } from '../src/routes/task.routes';
-import { userRoutes } from '../src/routes/user.routes';
-import { auditRoutes } from '../src/routes/audit.routes';
+import { authRoutes } from './routes/auth.routes';
+import { projectRoutes } from './routes/project.routes';
+import { taskRoutes } from './routes/task.routes';
+import { userRoutes } from './routes/user.routes';
+import { auditRoutes } from './routes/audit.routes';
 
 const app = new Hono();
 
