@@ -1,23 +1,10 @@
 {
   "version": 2,
-  "buildCommand": "bun x prisma generate",
-  "builds": [
+  "buildCommand": "bun run vercel-build",
+  "rewrites": [
     {
-      "src": "api/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "src/**",
-          "node_modules/.prisma/**",
-          "prisma/**"
-        ]
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.ts"
+      "source": "/(.*)",
+      "destination": "/api/index.js"
     }
   ]
 }
