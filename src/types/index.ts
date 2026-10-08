@@ -1,5 +1,5 @@
-import { Department, TaskStatus, UserRole } from '@prisma/client';
-import { JwtPayload } from '../lib/jwt';
+import type { Department, TaskStatus, UserRole } from '@prisma/client';
+import type { JwtPayload } from '../lib/jwt';
 
 declare module 'hono' {
   interface ContextVariableMap {

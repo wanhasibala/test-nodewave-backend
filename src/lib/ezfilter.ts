@@ -1,5 +1,5 @@
-import { buildFilterQuery, FilteringQuery, QuerySpecification } from '@nodewave/prisma-ezfilter';
-import { Context } from 'hono';
+import { buildFilterQuery, type FilteringQuery, type QuerySpecification } from '@nodewave/prisma-ezfilter';
+import type { Context } from 'hono';
 
 export const parseEzFilterFromContext = (c: Context, defaultSpec?: QuerySpecification) => {
   const queryParams = c.req.query();

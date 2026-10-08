@@ -318,6 +318,9 @@ taskRoutes.delete('/:id', requireRole(UserRole.PM), async (c) => {
   try {
     const user = c.get('user');
     const taskId = c.req.param('id');
+    if (!taskId) {
+      return c.json({ success: false, message: 'Task ID is required' }, 400);
+    }
     const result = await TaskService.deleteTask(taskId, user);
 
     return c.json(result);

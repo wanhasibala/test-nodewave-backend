@@ -108,6 +108,9 @@ projectRoutes.put('/:id', requireRole(UserRole.PM), async (c) => {
   try {
     const user = c.get('user');
     const projectId = c.req.param('id');
+    if (!projectId) {
+      return c.json({ success: false, message: 'Project ID is required' }, 400);
+    }
     const body = await c.req.json();
     const validated = createProjectSchema.partial().parse(body);
 

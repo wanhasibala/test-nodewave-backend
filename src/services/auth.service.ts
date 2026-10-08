@@ -1,7 +1,7 @@
 import { Department, UserRole } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 import { comparePassword, hashPassword } from '../lib/password';
-import { generateToken, JwtPayload } from '../lib/jwt';
+import { generateToken, type JwtPayload } from '../lib/jwt';
 
 export class AuthService {
   static async register(data: {

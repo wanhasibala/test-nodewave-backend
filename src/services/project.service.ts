@@ -1,6 +1,6 @@
 import { Prisma, TaskStatus, UserRole } from '@prisma/client';
 import { prisma } from '../lib/prisma';
-import { JwtPayload } from '../types';
+import type { JwtPayload } from '../types';
 import { TaskService } from './task.service';
 
 export class ProjectService {

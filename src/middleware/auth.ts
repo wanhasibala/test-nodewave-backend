@@ -1,4 +1,4 @@
-import { Context, Next } from 'hono';
+import type { Context, Next } from 'hono';
 import { verifyToken } from '../lib/jwt';
 import { prisma } from '../lib/prisma';
 import { UserRole } from '@prisma/client';

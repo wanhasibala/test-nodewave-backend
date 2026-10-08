@@ -1,7 +1,7 @@
 import { Department, Prisma, TaskStatus, UserRole } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 import { AuditService } from './audit.service';
-import { CreateTaskDto, JwtPayload, UpdateTaskDto } from '../types';
+import type { CreateTaskDto, JwtPayload, UpdateTaskDto } from '../types';
 
 export class TaskService {
   /**
